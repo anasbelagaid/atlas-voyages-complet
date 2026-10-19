@@ -1,0 +1,21 @@
+# Dépendances et résultats de build
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+backend/vendor/
+
+# Configuration locale et secrets
+backend/.env
+backend/.env.*.local
+backend/.env.testing
+backend/.phpunit.cache/
+backend/.phpunit.result.cache
+
+# Base de données et logs locaux
+backend/database/*.sqlite
+backend/storage/logs/*.log
+backend/bootstrap/cache/*.php
+
+# Fichiers systèmes
+.DS_Store
+Thumbs.db

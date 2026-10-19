@@ -1,0 +1,291 @@
+{
+  "info": {
+    "_postman_id": "6c507084-ea97-49a2-9d3b-e3a6cbbf2d3f",
+    "name": "Atlas Voyages API",
+    "description": "Collection de validation des endpoints requis par le mini-projet. Exécuter Laravel sur http://localhost:8000, effectuer php artisan migrate --seed, puis lancer la collection dans Postman Runner. Les tests vérifient les statuts HTTP et les réponses JSON.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "destinationId",
+      "value": "1"
+    },
+    {
+      "key": "offreId",
+      "value": "1"
+    },
+    {
+      "key": "createdDestinationId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Destinations",
+      "item": [
+        {
+          "name": "Lister les destinations",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/destinations"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "var data = pm.response.json();",
+                  "pm.test(\"La liste des destinations n’est pas vide\", () => pm.expect(data.length).to.be.above(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Voir une destination",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/destinations/{{destinationId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Créer une destination",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Paris\",\n  \"pays\": \"France\",\n  \"ville\": \"Paris\",\n  \"description\": \"La ville lumière.\",\n  \"prix\": 2200,\n  \"image\": \"https://example.test/paris.jpg\"\n}"
+            },
+            "url": "{{baseUrl}}/destinations"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "var data = pm.response.json();",
+                  "pm.test(\"La réponse contient un identifiant\", () => pm.expect(data.id).to.exist);",
+                  "pm.collectionVariables.set(\"createdDestinationId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modifier une destination",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prix\": 2300\n}"
+            },
+            "url": "{{baseUrl}}/destinations/{{createdDestinationId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Supprimer une destination",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/destinations/{{createdDestinationId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Offres",
+      "item": [
+        {
+          "name": "Lister les offres",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/offres"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "var data = pm.response.json();",
+                  "pm.test(\"La liste des offres n’est pas vide\", () => pm.expect(data.length).to.be.above(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Voir une offre",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/offres/{{offreId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Réservations",
+      "item": [
+        {
+          "name": "Créer une réservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"offre_id\": {{offreId}},\n  \"nom_client\": \"Ahmed Exemple\",\n  \"email\": \"ahmed@example.com\",\n  \"telephone\": \"0612345678\",\n  \"nombre_personnes\": 2,\n  \"date_reservation\": \"2026-11-15\"\n}"
+            },
+            "url": "{{baseUrl}}/reservations"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Liste des réservations",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reservations"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Contacts",
+      "item": [
+        {
+          "name": "Envoyer un message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Sara Exemple\",\n  \"email\": \"sara@example.com\",\n  \"sujet\": \"Séjour à Marrakech\",\n  \"message\": \"Je souhaite recevoir des informations.\"\n}"
+            },
+            "url": "{{baseUrl}}/contacts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
